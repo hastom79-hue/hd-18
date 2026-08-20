@@ -9,6 +9,29 @@
     .headline-mark{position:relative!important;display:inline!important;box-decoration-break:clone!important;-webkit-box-decoration-break:clone!important;padding:0 .035em!important;background:linear-gradient(to bottom,transparent 61%,rgba(0,166,81,.30) 61%,rgba(38,186,108,.30) 93%,transparent 93%)!important}
     .headline-mark:after{content:none!important;display:none!important}
 
+    /* Keep the welcome screen fully scrollable so the second row and footer are never clipped */
+    .welcome{height:100dvh!important;min-height:100dvh!important;overflow-y:auto!important;overflow-x:hidden!important;align-items:start!important;padding-bottom:max(28px,env(safe-area-inset-bottom))!important;overscroll-behavior:contain}
+    .welcome .intro,.welcome .selector{min-height:max-content!important}
+    .welcome .selector{padding-bottom:48px!important}
+    .welcome .cards{align-content:start!important}
+    @media(max-height:900px) and (min-width:901px){
+      .welcome{position:fixed!important}
+      .welcome .intro{padding-top:22px!important;padding-bottom:26px!important}
+      .welcome .selector{padding-top:24px!important;padding-bottom:42px!important;justify-content:flex-start!important}
+      .welcome .selector h2{margin-top:8px!important;margin-bottom:5px!important}
+      .welcome .selector>p{margin-bottom:14px!important}
+      .welcome .cards{gap:12px!important}
+      .welcome .edition{min-height:0!important}
+      .welcome .cardtop{min-height:58px!important;padding-top:12px!important;padding-bottom:10px!important}
+      .welcome .cardbody{padding-top:12px!important;padding-bottom:14px!important}
+      .welcome .flag-stage{min-height:82px!important;margin-bottom:8px!important;padding-top:2px!important;padding-bottom:10px!important}
+      .welcome .edition .flag-stage .flag-svg{width:112px!important;height:74px!important}
+      .welcome .edition[data-lang="en"] .flag-stage .flag-svg{width:65px!important;height:43px!important}
+      .welcome .lang{font-size:20px!important}
+      .welcome .plant-label{margin-top:9px!important;padding-top:8px!important}
+      .welcome .note{margin-bottom:8px!important}
+    }
+
     /* Large plant flags on the welcome edition cards */
     .edition .cardtop .flags{display:none!important}
     .edition .flag-stage{min-height:104px;display:flex;align-items:center;justify-content:center;gap:12px;margin:0 0 12px;padding:8px 4px 14px;border-bottom:1px solid #d9c58e}
@@ -18,6 +41,7 @@
     .edition .cardbody{padding-top:14px!important}
     .edition .plant-label{margin-top:12px!important;padding-top:10px!important}
     @media(max-width:620px){
+      .welcome{height:100dvh!important;overflow-y:auto!important;padding-bottom:40px!important}
       .edition .flag-stage{min-height:88px;margin-bottom:9px;padding-bottom:10px}
       .edition .flag-stage .flag-svg{width:118px!important;height:78px!important}
       .edition[data-lang="en"] .flag-stage .flag-svg{width:66px!important;height:44px!important}
