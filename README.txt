@@ -1,9 +1,14 @@
-HDPS Digital Library v2
-- 여러 권의 책이 있는 디지털 서재형 메인
-- HDPS 책만 활성/선택 가능
-- 한국어/영어/포르투갈어/중국어 선택 시 HDPS 표지만 전환
-- 비활성 도서는 LOCKED 상태
+HDPS Digital Library V3
+- iframe 완전 제거
+- 여러 책이 있는 실제 디지털 서재 스타일
+- 주변 책은 LOCKED / 비활성
+- HDPS 책만 조명, 3D, 반사광, 부유 효과로 활성
+- 언어 선택 시 활성 HDPS 책만 해당 언어로 전환
+- 원본 hd-08/12/13/14 HTML을 런타임에 직접 로드
+- 원본 HTML에서 좌측 상단 HD현대 logo anchor 실제 제거
+- 원본 CSS/JS는 jsDelivr CDN 경유로 정상 MIME 로드
+- 책갈피 기능 포함
 - 지은이: HQ 생산혁신팀 서지철 책임매니저
 - 발간일: 2026.08.20
 - © 2026 서지철. All Rights Reserved.
-- 무단 복제 금지 · 무단 배포 금지
+- 저작권 보호 · 무단 복제 금지 · 무단 배포 금지

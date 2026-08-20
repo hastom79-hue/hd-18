@@ -1,5 +1,63 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>HDPS · 简体中文</title><link rel="stylesheet" href="../assets/reader.css"></head><body>
-<div class="reader" data-lang="zh-CN">
-<header class="reader-head"><div class="reader-brand"><span class="reader-badge">04</span><div class="reader-meta"><strong>HDPS · 简体中文</strong><small>Global Brochure · 2026.08.20</small></div></div><div class="reader-actions"><button class="reader-btn" data-home type="button">Library</button><button class="reader-btn" data-bookmark type="button">☆ Bookmark</button></div></header>
-<main class="book-canvas"><article class="page-shell"><iframe src="https://hastom79-hue.github.io/hd-14/" title="HDPS · 简体中文"></iframe><div class="logo-mask"></div><div class="bookmark-ribbon"></div><div class="pub-note">지은이 · HQ 생산혁신팀 서지철 책임매니저　|　발간일 · 2026.08.20　|　© 2026 서지철 · 무단 복제 금지 · 무단 배포 금지</div></article></main></div>
-<script src="../assets/reader.js"></script></body></html>
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HDPS · Loading</title>
+<style>
+html,body{margin:0;min-height:100%;background:#0d1118;color:#fff;font-family:Arial,sans-serif}
+.loading{min-height:100vh;display:grid;place-items:center;text-align:center;padding:30px}
+.loading b{font-size:28px}.loading p{color:#8f9aaa;line-height:1.7}
+</style>
+</head>
+<body>
+<div class="loading"><div><b>HDPS</b><p>Digital book loading…</p></div></div>
+<script>
+(async()=>{
+  const cfg={
+    repo:'hd-13',
+    lang:'pt-BR',
+    home:'../'
+  };
+  const base=`https://cdn.jsdelivr.net/gh/hastom79-hue/${cfg.repo}@main/`;
+  try{
+    const res=await fetch(base+'index.html',{cache:'no-store'});
+    if(!res.ok) throw new Error('HTML '+res.status);
+    let html=await res.text();
+
+    // Remove the top-left HD Hyundai logo anchor from the ORIGINAL HTML.
+    html=html.replace(/<a\b[^>]*href=["']#top["'][^>]*>\s*<img\b[^>]*class=["'][^"']*\blogo\b[^"']*["'][^>]*>\s*<\/a>/i,'');
+    html=html.replace(/<a\b[^>]*aria-label=["'][^"']*(?:HD현대|HD Hyundai|Logotipo HD Hyundai|HD Hyundai 标志)[^"']*["'][^>]*>[\s\S]*?<\/a>/i,'');
+
+    // Make original CSS/JS load with correct MIME and absolute path.
+    html=html.replace(/href=["']style\.css(?:\?[^"']*)?["']/i,`href="${base}style.css"`);
+    html=html.replace(/src=["']script\.js(?:\?[^"']*)?["']/i,`src="${base}script.js"`);
+
+    const overlayCss=`<style id="hd18-overlay">
+      .topbar{justify-content:flex-end!important}
+      .logo{display:none!important}
+      #hd18-library{position:fixed;z-index:99999;left:14px;bottom:14px;display:flex;gap:7px;align-items:center;font-family:Inter,Arial,sans-serif}
+      #hd18-library button{border:1px solid rgba(255,255,255,.2);background:rgba(6,18,38,.9);color:#fff;border-radius:999px;padding:9px 12px;font-size:10px;font-weight:800;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.24)}
+      #hd18-library button.saved{background:#00a651}
+      #hd18-pub{position:fixed;z-index:99998;left:50%;bottom:14px;transform:translateX(-50%);max-width:72vw;padding:8px 11px;border-radius:999px;background:rgba(6,18,38,.86);backdrop-filter:blur(10px);color:#fff;font:800 9px/1.4 Inter,Arial,sans-serif;white-space:nowrap}
+      @media(max-width:760px){#hd18-pub{display:none}#hd18-library{left:8px;bottom:8px}}
+    </style>`;
+    html=html.replace('</head>',overlayCss+'</head>');
+
+    const overlay=`<div id="hd18-library"><button id="hd18-home">← Library</button><button id="hd18-bookmark">☆ Bookmark</button></div>
+      <div id="hd18-pub">지은이 · HQ 생산혁신팀 서지철 책임매니저　|　발간일 · 2026.08.20　|　© 2026 서지철 · 무단 복제 금지 · 무단 배포 금지</div>
+      <script>
+      (()=>{const key='hdps-bookmark',lang='${cfg.lang}',b=document.getElementById('hd18-bookmark');
+      const sync=()=>{let on=false;try{on=localStorage.getItem(key)===lang}catch(e){}b.classList.toggle('saved',on);b.textContent=on?'★ Bookmarked':'☆ Bookmark'};
+      document.getElementById('hd18-home').onclick=()=>location.href='../';
+      b.onclick=()=>{try{localStorage.getItem(key)===lang?localStorage.removeItem(key):localStorage.setItem(key,lang)}catch(e){}sync()};sync()})();
+      <\/script>`;
+    html=html.replace('</body>',overlay+'</body>');
+    document.open();document.write(html);document.close();
+  }catch(err){
+    document.body.innerHTML=`<div class="loading"><div><b>HDPS</b><p>책 데이터를 불러오지 못했습니다.<br>${String(err.message||err)}</p><p><a style="color:#79dca6" href="../">← Library</a></p></div>`;
+  }
+})();
+</script>
+</body>
+</html>
