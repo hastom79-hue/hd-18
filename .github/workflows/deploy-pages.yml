@@ -25,11 +25,25 @@ jobs:
         uses: actions/configure-pages@v5
 
       - name: Prepare static site
+        env:
+          HDPS_API_BASE_URL: ${{ vars.HDPS_API_BASE_URL }}
         run: |
           mkdir -p _site
           cp index.html security.js dynamic-config.js hdps-api.js _site/
           cp -R ko en pt-BR zh-CN admin _site/
           touch _site/.nojekyll
+          if [ -n "$HDPS_API_BASE_URL" ]; then
+            python - <<'PY'
+          import os
+          from pathlib import Path
+          p=Path('_site/dynamic-config.js')
+          s=p.read_text(encoding='utf-8')
+          url=os.environ.get('HDPS_API_BASE_URL','').rstrip('/')
+          s=s.replace('apiBaseUrl: ""', f'apiBaseUrl: "{url}"')
+          s=s.replace('backendMode: "static-fallback"', 'backendMode: "dynamic-api"')
+          p.write_text(s, encoding='utf-8')
+          PY
+          fi
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
