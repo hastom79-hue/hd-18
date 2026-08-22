@@ -26,7 +26,7 @@ a{color:inherit;text-decoration:none}
 .machine-card{position:relative;height:148px;border:1px solid rgba(255,255,255,.12);border-radius:18px;overflow:hidden;background:#0c1b28;box-shadow:0 16px 34px rgba(0,0,0,.24)}
 .machine-card img{width:100%;height:100%;display:block;object-fit:cover;transition:transform .5s ease}.machine-card:hover img{transform:scale(1.035)}
 .machine-card:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 36%,rgba(2,9,14,.9) 100%);pointer-events:none}.machine-card .machine-label{position:absolute;z-index:2;left:14px;right:14px;bottom:11px;display:flex;align-items:end;justify-content:space-between;gap:8px}.machine-label strong{font-size:12px;letter-spacing:.04em;color:#fff}.machine-label span{font-size:8px;font-weight:900;color:#93e1b5;letter-spacing:.08em;white-space:nowrap}
-.secure{color:#d3b45f;font-size:9px;font-weight:900;letter-spacing:.02em}
+.secure{color:#d3b45f;font-size:9px;font-weight:900;letter-spacing:.02em}.intro-foot{display:flex;align-items:center;justify-content:space-between;gap:14px}.readership{display:inline-flex;align-items:baseline;gap:7px;padding:9px 12px;border:1px solid rgba(0,212,138,.24);border-radius:999px;background:rgba(0,212,138,.055);color:#9caab5;white-space:nowrap}.readership span{font-size:8px;font-weight:900;letter-spacing:.08em}.readership b{color:#65e4bb;font-size:17px;line-height:1}.readership small{font-size:8px;color:#6f818e}
 .selector{padding:76px 30px 30px;display:flex;flex-direction:column;justify-content:center;min-width:0}.selector .eyebrow{font-size:9px;letter-spacing:.16em;color:#7c8792;font-weight:900}.selector h2{margin:10px 0 6px;font-size:31px}.selector>p{margin:0 0 16px;color:#86939f;font-size:11px}
 .cards{display:grid;grid-template-columns:1fr 1fr;gap:12px}.edition{overflow:hidden;cursor:pointer;border:1px solid rgba(255,255,255,.16);border-radius:19px;background:var(--cream);color:#102d54;box-shadow:0 16px 34px rgba(0,0,0,.2);transition:transform .2s,box-shadow .2s}.edition:hover{transform:translateY(-4px);box-shadow:0 22px 42px rgba(0,0,0,.28)}
 .cardtop{min-height:54px;padding:14px 18px;display:flex;align-items:center;background:linear-gradient(135deg,#0d456a,#0b735d);border-bottom:4px solid #eac35a;color:#fff}.vol{font-size:9px;font-weight:900;letter-spacing:.08em}.cardbody{padding:12px 18px 15px}.flagstage{min-height:70px;display:flex;align-items:center;justify-content:center;gap:9px;border-bottom:1px solid #d8c48d;margin-bottom:10px}.flag-icon{width:56px;height:37px;display:block;border-radius:3px;box-shadow:0 3px 9px rgba(0,0,0,.14);border:1px solid rgba(0,0,0,.08);background:#fff}.en .flag-icon{width:43px;height:29px}.lang{font-size:21px;font-weight:900}.sub{font-size:9px;color:#919aa2;margin-top:4px}.plant{margin-top:9px;padding-top:8px;border-top:1px solid #ddd6ca;color:#987a3d;font-size:8px;font-weight:900;letter-spacing:.1em}.count{margin-top:6px;font-size:12px;font-weight:900;color:#203953}.arrow{float:right;color:#00a86b;font-size:24px}
@@ -58,7 +58,7 @@ a{color:inherit;text-decoration:none}
     <figure class="machine-card"><img src="https://www.hd-hyundaice.com/upload/files/2025/05/1f2e5f03-d248-4e1c-9ae9-af0bea67bae4.jpg" alt="HYUNDAI HX 계열 굴착기" loading="eager"><figcaption class="machine-label"><strong>HYUNDAI · EXCAVATOR</strong><span>HD CONSTRUCTION EQUIPMENT</span></figcaption></figure>
     <figure class="machine-card"><img src="https://eu.develon-ce.com/media/inline/25500" alt="DEVELON DL 계열 휠로더" loading="eager"><figcaption class="machine-label"><strong>DEVELON · WHEEL LOADER</strong><span>HD CONSTRUCTION EQUIPMENT</span></figcaption></figure>
   </div>
-  <div class="secure">● CONFIDENTIAL · INTERNAL USE ONLY · 무단 복제/배포 금지</div>
+  <div class="intro-foot"><div class="secure">● CONFIDENTIAL · INTERNAL USE ONLY · 무단 복제/배포 금지</div><div class="readership" aria-live="polite"><span id="reader-label">이 기기 누적 열람</span><b id="reader-count">1</b><small>회</small></div></div>
  </div>
  <div class="selector">
   <div class="eyebrow">국가 / 언어 에디션 선택</div>
@@ -85,7 +85,22 @@ a{color:inherit;text-decoration:none}
 <script src="dynamic-config.js"></script>
 <script src="hdps-api.js"></script>
 <script>
-window.HDPS_API?.logAccess({event:'landing_view'}).catch(()=>{});
+const readerCountEl=document.getElementById('reader-count');
+const readerLabelEl=document.getElementById('reader-label');
+let localReadCount=1;
+try{
+  const saved=Number(localStorage.getItem('hdps_landing_reads')||0);
+  localReadCount=Number.isFinite(saved)&&saved>=0?Math.floor(saved)+1:1;
+  localStorage.setItem('hdps_landing_reads',String(localReadCount));
+}catch{}
+readerCountEl.textContent=localReadCount.toLocaleString('ko-KR');
+Promise.resolve(window.HDPS_API?.logAccess({event:'landing_view'})).then(stats=>{
+  const total=Number(stats?.totalVisits);
+  if(Number.isFinite(total)&&total>0){
+    readerLabelEl.textContent='전체 누적 열람';
+    readerCountEl.textContent=Math.floor(total).toLocaleString('ko-KR');
+  }
+}).catch(()=>{});
 document.querySelectorAll('.edition[data-href]').forEach(card=>{
   card.tabIndex=0; card.setAttribute('role','link');
   const go=()=>{window.HDPS_API?.logAccess({event:'edition_open',edition:card.dataset.edition}).catch(()=>{});location.href=card.dataset.href;};
