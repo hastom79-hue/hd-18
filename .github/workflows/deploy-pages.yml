@@ -32,8 +32,16 @@ jobs:
             'zh-CN':('<span class="headline-mark">重新定义</span>制造标准','← 书库')
           }
           root=Path('index.html').read_text(encoding='utf-8')
+          cfg=Path('dynamic-config.js').read_text(encoding='utf-8')
           assert 'HDPS Global Digital Brochure' in root
           assert 'Operation Excellence Team' in root and 'Jicheol Seoh' in root
+          assert all(x in root for x in ('<span>발행일</span>','<span>발간자</span>','<span>에디션</span>'))
+          assert all(x in root for x in ('대한민국 국기','인도 국기','브라질 국기','노르웨이 국기','중국 국기'))
+          assert 'language-switch' in root and all(x in root for x in ('한국어','English','Português','简体中文'))
+          assert 'www.hd-hyundaice.com/upload/files/2025/05/1f2e5f03-d248-4e1c-9ae9-af0bea67bae4.jpg' in root
+          assert 'eu.develon-ce.com/media/inline/25500' in root
+          assert 'hdps-global-language-switch' in cfg
+          assert all(x in cfg for x in ("['ko','한국어']","['en','English']","['pt-BR','Português']","['zh-CN','简体中文']"))
           for lang,(mark,back) in expected.items():
             for name in ('index.html','style.css','script.js'):
               p=Path(lang)/name
@@ -43,10 +51,10 @@ jobs:
             assert back in h, f'{lang}: library return missing'
             assert 'class="logo"' not in h, f'{lang}: removed header logo returned'
             assert 'cdn.jsdelivr.net/gh/hastom79-hue/' not in h, f'{lang}: runtime book CDN dependency returned'
-            assert '../security.js' in h and '../hdps-api.js' in h, f'{lang}: shared integration missing'
+            assert '../security.js' in h and '../hdps-api.js' in h and '../dynamic-config.js' in h, f'{lang}: shared integration missing'
           print('HDPS_CONTENT_QA_OK')
           PY
-          for f in ko/script.js en/script.js pt-BR/script.js zh-CN/script.js hdps-api.js security.js backend/server.mjs; do
+          for f in dynamic-config.js ko/script.js en/script.js pt-BR/script.js zh-CN/script.js hdps-api.js security.js backend/server.mjs; do
             node --check "$f"
           done
           echo HDPS_JS_QA_OK
