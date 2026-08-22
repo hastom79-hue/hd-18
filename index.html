@@ -2,59 +2,83 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#06111b">
 <title>HDPS Global Digital Brochure</title>
 <style>
-:root{--ink:#f7f3e8;--gold:#f0bd43;--green:#00d48a;--line:rgba(255,255,255,.10);--cream:#f4efe5}
-*{box-sizing:border-box} html,body{margin:0;min-height:100%;font-family:Arial,"Noto Sans KR",sans-serif;background:#06111b;color:var(--ink)}
-body{background:radial-gradient(circle at 42% 55%,rgba(14,72,108,.27),transparent 34%),linear-gradient(180deg,#06111b,#071621 62%,#06111b)}
-.welcome{min-height:100vh;display:grid;grid-template-columns:1.03fr .97fr;background:linear-gradient(90deg,#071420 0 53%,#061018 53% 100%)}
-.intro{padding:30px 40px;display:flex;flex-direction:column;justify-content:space-between;border-right:1px solid var(--line)}
-.brand{display:flex;align-items:center;gap:14px}.brandmark{width:58px;height:58px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(145deg,#174a79,#0f725a);font-weight:900;font-size:12px}
+:root{--ink:#f7f3e8;--gold:#f0bd43;--green:#00d48a;--line:rgba(255,255,255,.10);--cream:#f4efe5;--navy:#06111b}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Arial,"Noto Sans KR",sans-serif;background:#06111b;color:var(--ink)}
+body{background:radial-gradient(circle at 35% 55%,rgba(14,72,108,.28),transparent 34%),linear-gradient(180deg,#06111b,#071621 62%,#06111b);overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+.language-switch{position:fixed;z-index:100;right:max(16px,env(safe-area-inset-right));top:max(14px,env(safe-area-inset-top));display:flex;gap:5px;padding:5px;border:1px solid rgba(255,255,255,.14);border-radius:999px;background:rgba(5,15,24,.88);box-shadow:0 12px 34px rgba(0,0,0,.28);backdrop-filter:blur(14px)}
+.language-switch a{display:inline-flex;align-items:center;justify-content:center;min-height:32px;padding:0 12px;border-radius:999px;color:#aeb8c2;font-size:10px;font-weight:900;letter-spacing:.01em;transition:.2s}
+.language-switch a:hover{color:#fff;background:rgba(255,255,255,.08)}.language-switch a.active{background:linear-gradient(135deg,#0e4f7a,#0b735d);color:#fff;box-shadow:0 6px 16px rgba(0,0,0,.2)}
+.welcome{min-height:100vh;display:grid;grid-template-columns:1.08fr .92fr;background:linear-gradient(90deg,#071420 0 54%,#061018 54% 100%)}
+.intro{padding:28px 38px 24px;display:flex;flex-direction:column;gap:18px;border-right:1px solid var(--line);min-width:0}
+.brand{display:flex;align-items:center;gap:14px;min-height:60px}.brandmark{width:58px;height:58px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(145deg,#174a79,#0f725a);font-weight:900;font-size:12px;box-shadow:0 12px 30px rgba(0,0,0,.2)}
 .brand strong{font-size:14px;letter-spacing:.15em}.brand small{display:block;margin-top:5px;color:#73808d;font-size:9px}
-.kicker{font-size:10px;font-weight:900;letter-spacing:.22em;color:var(--gold)}
-.title{margin:15px 0 16px;font-size:clamp(44px,5vw,72px);line-height:1.03;letter-spacing:-.055em}.title .accent{display:block;color:#f4d17a}
-.desc{max-width:720px;color:#9ba7b3;line-height:1.85;font-size:13px}
-.meta{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:28px;max-width:700px}
-.meta>div{padding:16px;border:1px solid rgba(240,189,67,.22);border-radius:14px;background:rgba(255,255,255,.025)}
-.meta span{display:block;color:#cfae62;font-size:8px;font-weight:900;letter-spacing:.15em}.meta b{display:block;margin-top:9px;font-size:13px;line-height:1.45}
-.secure{color:#d3b45f;font-size:9px;font-weight:900}
-.selector{padding:26px 30px 30px;display:flex;flex-direction:column;justify-content:center}.selector .eyebrow{font-size:9px;letter-spacing:.18em;color:#7c8792;font-weight:900}
-.selector h2{margin:10px 0 6px;font-size:31px}.selector>p{margin:0 0 16px;color:#86939f;font-size:11px}
-.cards{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.edition{overflow:hidden;cursor:pointer;border:1px solid rgba(255,255,255,.16);border-radius:19px;background:var(--cream);color:#102d54;box-shadow:0 16px 34px rgba(0,0,0,.2)}
-.cardtop{min-height:54px;padding:14px 18px;display:flex;align-items:center;background:linear-gradient(135deg,#0d456a,#0b735d);border-bottom:4px solid #eac35a;color:#fff}
-.vol{font-size:9px;font-weight:900;letter-spacing:.08em}.cardbody{padding:12px 18px 15px}.flagstage{min-height:70px;display:flex;align-items:center;justify-content:center;gap:10px;border-bottom:1px solid #d8c48d;margin-bottom:10px}
-.flag{font-size:42px;line-height:1}.en .flag{font-size:31px}.lang{font-size:21px;font-weight:900}.sub{font-size:9px;color:#919aa2;margin-top:4px}
-.plant{margin-top:9px;padding-top:8px;border-top:1px solid #ddd6ca;color:#987a3d;font-size:8px;font-weight:900;letter-spacing:.1em}.count{margin-top:6px;font-size:12px;font-weight:900;color:#203953}.arrow{float:right;color:#00a86b;font-size:24px}
-@media(max-width:850px){.welcome{grid-template-columns:1fr}.intro{min-height:620px}.cards{grid-template-columns:1fr 1fr}}
+.intro-main{max-width:760px}.kicker{font-size:10px;font-weight:900;letter-spacing:.2em;color:var(--gold)}
+.title{margin:12px 0 13px;font-size:clamp(40px,4.55vw,66px);line-height:1.03;letter-spacing:-.055em}.title .accent{display:block;color:#f4d17a}
+.desc{max-width:720px;color:#9ba7b3;line-height:1.78;font-size:13px;margin:0}
+.meta{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:20px;max-width:720px}.meta>div{padding:13px 14px;border:1px solid rgba(240,189,67,.22);border-radius:14px;background:rgba(255,255,255,.025)}
+.meta span{display:block;color:#cfae62;font-size:9px;font-weight:900;letter-spacing:.11em}.meta b{display:block;margin-top:8px;font-size:12.5px;line-height:1.45}
+.machine-gallery{display:grid;grid-template-columns:1.05fr .95fr;gap:10px;max-width:720px;margin-top:auto}
+.machine-card{position:relative;height:148px;border:1px solid rgba(255,255,255,.12);border-radius:18px;overflow:hidden;background:#0c1b28;box-shadow:0 16px 34px rgba(0,0,0,.24)}
+.machine-card img{width:100%;height:100%;display:block;object-fit:cover;transition:transform .5s ease}.machine-card:hover img{transform:scale(1.035)}
+.machine-card:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 36%,rgba(2,9,14,.9) 100%);pointer-events:none}.machine-card .machine-label{position:absolute;z-index:2;left:14px;right:14px;bottom:11px;display:flex;align-items:end;justify-content:space-between;gap:8px}.machine-label strong{font-size:12px;letter-spacing:.04em;color:#fff}.machine-label span{font-size:8px;font-weight:900;color:#93e1b5;letter-spacing:.08em;white-space:nowrap}
+.secure{color:#d3b45f;font-size:9px;font-weight:900;letter-spacing:.02em}
+.selector{padding:76px 30px 30px;display:flex;flex-direction:column;justify-content:center;min-width:0}.selector .eyebrow{font-size:9px;letter-spacing:.16em;color:#7c8792;font-weight:900}.selector h2{margin:10px 0 6px;font-size:31px}.selector>p{margin:0 0 16px;color:#86939f;font-size:11px}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:12px}.edition{overflow:hidden;cursor:pointer;border:1px solid rgba(255,255,255,.16);border-radius:19px;background:var(--cream);color:#102d54;box-shadow:0 16px 34px rgba(0,0,0,.2);transition:transform .2s,box-shadow .2s}.edition:hover{transform:translateY(-4px);box-shadow:0 22px 42px rgba(0,0,0,.28)}
+.cardtop{min-height:54px;padding:14px 18px;display:flex;align-items:center;background:linear-gradient(135deg,#0d456a,#0b735d);border-bottom:4px solid #eac35a;color:#fff}.vol{font-size:9px;font-weight:900;letter-spacing:.08em}.cardbody{padding:12px 18px 15px}.flagstage{min-height:70px;display:flex;align-items:center;justify-content:center;gap:9px;border-bottom:1px solid #d8c48d;margin-bottom:10px}.flag-icon{width:56px;height:37px;display:block;border-radius:3px;box-shadow:0 3px 9px rgba(0,0,0,.14);border:1px solid rgba(0,0,0,.08);background:#fff}.en .flag-icon{width:43px;height:29px}.lang{font-size:21px;font-weight:900}.sub{font-size:9px;color:#919aa2;margin-top:4px}.plant{margin-top:9px;padding-top:8px;border-top:1px solid #ddd6ca;color:#987a3d;font-size:8px;font-weight:900;letter-spacing:.1em}.count{margin-top:6px;font-size:12px;font-weight:900;color:#203953}.arrow{float:right;color:#00a86b;font-size:24px}
+@media(max-width:1000px){.welcome{grid-template-columns:1fr}.intro{min-height:auto;padding-top:82px}.selector{padding-top:36px}.machine-gallery{margin-top:6px}.language-switch{top:10px}.cards{grid-template-columns:1fr 1fr}}
+@media(max-width:620px){.intro{padding:76px 20px 22px}.selector{padding:30px 20px}.language-switch{right:8px;left:8px;justify-content:center}.language-switch a{padding:0 9px;font-size:9px}.title{font-size:42px}.meta{grid-template-columns:1fr}.machine-gallery{grid-template-columns:1fr}.machine-card{height:160px}.cards{grid-template-columns:1fr}.selector h2{font-size:27px}}
 </style>
 </head>
 <body>
+<nav class="language-switch" aria-label="언어 버전 선택">
+  <a class="active" href="ko/" lang="ko">한국어</a>
+  <a href="en/" lang="en">English</a>
+  <a href="pt-BR/" lang="pt-BR">Português</a>
+  <a href="zh-CN/" lang="zh-CN">简体中文</a>
+</nav>
 <section class="welcome">
  <div class="intro">
   <div class="brand"><span class="brandmark">HDPS</span><div><strong>HDPS GLOBAL DIGITAL BROCHURE</strong><small>HD CONSTRUCTION EQUIPMENT · 2026 EDITION</small></div></div>
-  <div>
+  <div class="intro-main">
    <div class="kicker">GLOBAL PRODUCTION INNOVATION PUBLICATION</div>
    <h1 class="title">HDPS를 세계의 현장에<span class="accent">하나의 기준으로 연결합니다.</span></h1>
-   <p class="desc">HD Construction Equipment의 생산혁신체계 HDPS를 소개하는 공식 디지털 홍보책자입니다. 적용 대상 공장에 맞는 언어 에디션을 선택하면 해당 책으로 이동합니다.</p>
+   <p class="desc">HD Construction Equipment의 생산혁신체계 HDPS를 소개하는 공식 디지털 홍보책자입니다. 적용 대상 공장에 맞는 언어 에디션을 선택하면 해당 언어의 전체 웹페이지로 이동합니다.</p>
    <div class="meta">
-    <div><span>PUBLICATION</span><b>2026.08.20</b></div>
-    <div><span>PUBLISHER</span><b>Operation Excellence Team<br>서지철 · Jicheol Seoh</b></div>
-    <div><span>EDITION</span><b>4 Languages<br>Global Edition</b></div>
+    <div><span>발행일</span><b>2026.08.22</b></div>
+    <div><span>발간자</span><b>Operation Excellence Team<br>서지철 · Jicheol Seoh</b></div>
+    <div><span>에디션</span><b>4개 언어<br>Global Edition</b></div>
    </div>
+  </div>
+  <div class="machine-gallery" aria-label="HD건설기계 대표 장비 이미지">
+    <figure class="machine-card"><img src="https://www.hd-hyundaice.com/upload/files/2025/05/1f2e5f03-d248-4e1c-9ae9-af0bea67bae4.jpg" alt="HYUNDAI HX 계열 굴착기" loading="eager"><figcaption class="machine-label"><strong>HYUNDAI · EXCAVATOR</strong><span>HD CONSTRUCTION EQUIPMENT</span></figcaption></figure>
+    <figure class="machine-card"><img src="https://eu.develon-ce.com/media/inline/25500" alt="DEVELON DL 계열 휠로더" loading="eager"><figcaption class="machine-label"><strong>DEVELON · WHEEL LOADER</strong><span>HD CONSTRUCTION EQUIPMENT</span></figcaption></figure>
   </div>
   <div class="secure">● CONFIDENTIAL · INTERNAL USE ONLY · 무단 복제/배포 금지</div>
  </div>
  <div class="selector">
-  <div class="eyebrow">SELECT YOUR PLANT EDITION</div>
+  <div class="eyebrow">국가 / 언어 에디션 선택</div>
   <h2>적용 공장 / 언어 선택</h2>
   <p>국기는 해당 언어판이 적용되는 대상 공장을 의미합니다.</p>
   <div class="cards">
-   <div class="edition" data-edition="ko" data-href="ko/?from=library"><div class="cardtop"><span class="vol">VOL.01 · KOREAN</span></div><div class="cardbody"><div class="flagstage"><span class="flag">🇰🇷</span></div><div class="lang">한국어</div><div class="sub">Korean Edition</div><div class="plant">APPLICABLE PLANT</div><div class="count">1 PLANT <span class="arrow">→</span></div></div></div>
-   <div class="edition en" data-edition="en" data-href="en/?from=library"><div class="cardtop"><span class="vol">VOL.02 · ENGLISH</span></div><div class="cardbody"><div class="flagstage"><span class="flag">🇮🇳</span><span class="flag">🇧🇷</span><span class="flag">🇳🇴</span></div><div class="lang">English</div><div class="sub">English Edition</div><div class="plant">APPLICABLE PLANTS</div><div class="count">3 PLANTS <span class="arrow">→</span></div></div></div>
-   <div class="edition" data-edition="pt-BR" data-href="pt-BR/?from=library"><div class="cardtop"><span class="vol">VOL.03 · PORTUGUÊS</span></div><div class="cardbody"><div class="flagstage"><span class="flag">🇧🇷</span></div><div class="lang">Português</div><div class="sub">Edição em Português</div><div class="plant">APPLICABLE PLANT</div><div class="count">1 PLANTA <span class="arrow">→</span></div></div></div>
-   <div class="edition" data-edition="zh-CN" data-href="zh-CN/?from=library"><div class="cardtop"><span class="vol">VOL.04 · 简体中文</span></div><div class="cardbody"><div class="flagstage"><span class="flag">🇨🇳</span></div><div class="lang">简体中文</div><div class="sub">简体中文版</div><div class="plant">APPLICABLE PLANT</div><div class="count">1 个工厂 <span class="arrow">→</span></div></div></div>
+   <div class="edition" data-edition="ko" data-href="ko/?from=library"><div class="cardtop"><span class="vol">VOL.01 · KOREAN</span></div><div class="cardbody"><div class="flagstage">
+    <svg class="flag-icon" viewBox="0 0 72 48" role="img" aria-label="대한민국 국기"><rect width="72" height="48" fill="#fff"/><circle cx="36" cy="24" r="10" fill="#cd2e3a"/><path d="M36 14a10 10 0 0 1 0 20a5 5 0 0 1 0-10a5 5 0 0 0 0-10z" fill="#0047a0"/><g stroke="#111" stroke-width="2.2"><path d="M13 11l8 5M11 15l8 5M10 19l8 5M51 29l8 5M53 25l8 5M54 21l8 5"/></g></svg>
+   </div><div class="lang">한국어</div><div class="sub">Korean Edition</div><div class="plant">APPLICABLE PLANT</div><div class="count">1 PLANT <span class="arrow">→</span></div></div></div>
+   <div class="edition en" data-edition="en" data-href="en/?from=library"><div class="cardtop"><span class="vol">VOL.02 · ENGLISH</span></div><div class="cardbody"><div class="flagstage">
+    <svg class="flag-icon" viewBox="0 0 72 48" role="img" aria-label="인도 국기"><rect width="72" height="16" fill="#ff9933"/><rect y="16" width="72" height="16" fill="#fff"/><rect y="32" width="72" height="16" fill="#138808"/><circle cx="36" cy="24" r="5" fill="none" stroke="#000080" stroke-width="1.5"/></svg>
+    <svg class="flag-icon" viewBox="0 0 72 48" role="img" aria-label="브라질 국기"><rect width="72" height="48" fill="#009c3b"/><path d="M36 6L64 24 36 42 8 24z" fill="#ffdf00"/><circle cx="36" cy="24" r="10" fill="#002776"/></svg>
+    <svg class="flag-icon" viewBox="0 0 72 48" role="img" aria-label="노르웨이 국기"><rect width="72" height="48" fill="#ba0c2f"/><rect x="20" width="10" height="48" fill="#fff"/><rect y="19" width="72" height="10" fill="#fff"/><rect x="23" width="4" height="48" fill="#00205b"/><rect y="22" width="72" height="4" fill="#00205b"/></svg>
+   </div><div class="lang">English</div><div class="sub">English Edition</div><div class="plant">APPLICABLE PLANTS</div><div class="count">3 PLANTS <span class="arrow">→</span></div></div></div>
+   <div class="edition" data-edition="pt-BR" data-href="pt-BR/?from=library"><div class="cardtop"><span class="vol">VOL.03 · PORTUGUÊS</span></div><div class="cardbody"><div class="flagstage">
+    <svg class="flag-icon" viewBox="0 0 72 48" role="img" aria-label="브라질 국기"><rect width="72" height="48" fill="#009c3b"/><path d="M36 6L64 24 36 42 8 24z" fill="#ffdf00"/><circle cx="36" cy="24" r="10" fill="#002776"/></svg>
+   </div><div class="lang">Português</div><div class="sub">Edição em Português</div><div class="plant">APPLICABLE PLANT</div><div class="count">1 PLANTA <span class="arrow">→</span></div></div></div>
+   <div class="edition" data-edition="zh-CN" data-href="zh-CN/?from=library"><div class="cardtop"><span class="vol">VOL.04 · 简体中文</span></div><div class="cardbody"><div class="flagstage">
+    <svg class="flag-icon" viewBox="0 0 72 48" role="img" aria-label="중국 국기"><rect width="72" height="48" fill="#de2910"/><path d="M13 8l2.2 6.8h7.1l-5.7 4.2 2.2 6.8-5.8-4.2-5.7 4.2 2.2-6.8-5.8-4.2h7.2z" fill="#ffde00" transform="scale(.62) translate(5 4)"/></svg>
+   </div><div class="lang">简体中文</div><div class="sub">简体中文版</div><div class="plant">APPLICABLE PLANT</div><div class="count">1 个工厂 <span class="arrow">→</span></div></div></div>
   </div>
  </div>
 </section>
