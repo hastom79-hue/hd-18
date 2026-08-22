@@ -51,17 +51,20 @@ body{background:radial-gradient(circle at 42% 55%,rgba(14,72,108,.27),transparen
   <h2>적용 공장 / 언어 선택</h2>
   <p>국기는 해당 언어판이 적용되는 대상 공장을 의미합니다.</p>
   <div class="cards">
-   <div class="edition" data-href="ko/?from=library"><div class="cardtop"><span class="vol">VOL.01 · KOREAN</span></div><div class="cardbody"><div class="flagstage"><span class="flag">🇰🇷</span></div><div class="lang">한국어</div><div class="sub">Korean Edition</div><div class="plant">APPLICABLE PLANT</div><div class="count">1 PLANT <span class="arrow">→</span></div></div></div>
-   <div class="edition en" data-href="en/?from=library"><div class="cardtop"><span class="vol">VOL.02 · ENGLISH</span></div><div class="cardbody"><div class="flagstage"><span class="flag">🇮🇳</span><span class="flag">🇧🇷</span><span class="flag">🇳🇴</span></div><div class="lang">English</div><div class="sub">English Edition</div><div class="plant">APPLICABLE PLANTS</div><div class="count">3 PLANTS <span class="arrow">→</span></div></div></div>
-   <div class="edition" data-href="pt-BR/?from=library"><div class="cardtop"><span class="vol">VOL.03 · PORTUGUÊS</span></div><div class="cardbody"><div class="flagstage"><span class="flag">🇧🇷</span></div><div class="lang">Português</div><div class="sub">Edição em Português</div><div class="plant">APPLICABLE PLANT</div><div class="count">1 PLANTA <span class="arrow">→</span></div></div></div>
-   <div class="edition" data-href="zh-CN/?from=library"><div class="cardtop"><span class="vol">VOL.04 · 简体中文</span></div><div class="cardbody"><div class="flagstage"><span class="flag">🇨🇳</span></div><div class="lang">简体中文</div><div class="sub">简体中文版</div><div class="plant">APPLICABLE PLANT</div><div class="count">1 个工厂 <span class="arrow">→</span></div></div></div>
+   <div class="edition" data-edition="ko" data-href="ko/?from=library"><div class="cardtop"><span class="vol">VOL.01 · KOREAN</span></div><div class="cardbody"><div class="flagstage"><span class="flag">🇰🇷</span></div><div class="lang">한국어</div><div class="sub">Korean Edition</div><div class="plant">APPLICABLE PLANT</div><div class="count">1 PLANT <span class="arrow">→</span></div></div></div>
+   <div class="edition en" data-edition="en" data-href="en/?from=library"><div class="cardtop"><span class="vol">VOL.02 · ENGLISH</span></div><div class="cardbody"><div class="flagstage"><span class="flag">🇮🇳</span><span class="flag">🇧🇷</span><span class="flag">🇳🇴</span></div><div class="lang">English</div><div class="sub">English Edition</div><div class="plant">APPLICABLE PLANTS</div><div class="count">3 PLANTS <span class="arrow">→</span></div></div></div>
+   <div class="edition" data-edition="pt-BR" data-href="pt-BR/?from=library"><div class="cardtop"><span class="vol">VOL.03 · PORTUGUÊS</span></div><div class="cardbody"><div class="flagstage"><span class="flag">🇧🇷</span></div><div class="lang">Português</div><div class="sub">Edição em Português</div><div class="plant">APPLICABLE PLANT</div><div class="count">1 PLANTA <span class="arrow">→</span></div></div></div>
+   <div class="edition" data-edition="zh-CN" data-href="zh-CN/?from=library"><div class="cardtop"><span class="vol">VOL.04 · 简体中文</span></div><div class="cardbody"><div class="flagstage"><span class="flag">🇨🇳</span></div><div class="lang">简体中文</div><div class="sub">简体中文版</div><div class="plant">APPLICABLE PLANT</div><div class="count">1 个工厂 <span class="arrow">→</span></div></div></div>
   </div>
  </div>
 </section>
+<script src="dynamic-config.js"></script>
+<script src="hdps-api.js"></script>
 <script>
+window.HDPS_API?.logAccess({event:'landing_view'}).catch(()=>{});
 document.querySelectorAll('.edition[data-href]').forEach(card=>{
   card.tabIndex=0; card.setAttribute('role','link');
-  const go=()=>location.href=card.dataset.href;
+  const go=()=>{window.HDPS_API?.logAccess({event:'edition_open',edition:card.dataset.edition}).catch(()=>{});location.href=card.dataset.href;};
   card.addEventListener('click',go);
   card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go();}});
 });
