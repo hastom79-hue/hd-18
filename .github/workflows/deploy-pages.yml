@@ -42,7 +42,7 @@ jobs:
             assert p.exists() and p.stat().st_size>100 and '<svg' in p.read_text(encoding='utf-8'), f'{p}: accurate flag asset missing'
           assert 'language-switch' in root and all(x in root for x in ('한국어','English','Português','简体中文'))
           assert 'reader-count' in root and 'hdps_landing_reads' in root
-          assert 'eu.develon-ce.com/media/download/25399' in root
+          assert 'eu.develon-ce.com/media/inline/31547' in root
           assert '970awheelloaderroading.jpeg' in root
           assert 'DEVELON · EXCAVATOR' in root
           assert 'HYUNDAI · WHEEL LOADER' in root
