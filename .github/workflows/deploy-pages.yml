@@ -21,6 +21,36 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Validate final repository state
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          expected={
+            'ko':('<span class="headline-mark">새로 정립하다</span>','← 서재'),
+            'en':('<span class="headline-mark">Redefines</span> the Standard for Manufacturing','← Library'),
+            'pt-BR':('<span class="headline-mark">Redefine</span> o Padrão da Manufatura','← Biblioteca'),
+            'zh-CN':('<span class="headline-mark">重新定义</span>制造标准','← 书库')
+          }
+          root=Path('index.html').read_text(encoding='utf-8')
+          assert 'HDPS Global Digital Brochure' in root
+          assert 'Operation Excellence Team' in root and 'Jicheol Seoh' in root
+          for lang,(mark,back) in expected.items():
+            for name in ('index.html','style.css','script.js'):
+              p=Path(lang)/name
+              assert p.exists() and p.stat().st_size>500, f'{p}: missing or too small'
+            h=(Path(lang)/'index.html').read_text(encoding='utf-8')
+            assert mark in h, f'{lang}: highlight scope mismatch'
+            assert back in h, f'{lang}: library return missing'
+            assert 'class="logo"' not in h, f'{lang}: removed header logo returned'
+            assert 'cdn.jsdelivr.net/gh/hastom79-hue/' not in h, f'{lang}: runtime book CDN dependency returned'
+            assert '../security.js' in h and '../hdps-api.js' in h, f'{lang}: shared integration missing'
+          print('HDPS_CONTENT_QA_OK')
+          PY
+          for f in ko/script.js en/script.js pt-BR/script.js zh-CN/script.js hdps-api.js security.js backend/server.mjs; do
+            node --check "$f"
+          done
+          echo HDPS_JS_QA_OK
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
@@ -41,7 +71,7 @@ jobs:
           url=os.environ.get('HDPS_API_BASE_URL','').rstrip('/')
           s=s.replace('apiBaseUrl: ""', f'apiBaseUrl: "{url}"')
           s=s.replace('backendMode: "static-fallback"', 'backendMode: "dynamic-api"')
-          p.write_text(s, encoding='utf-8')
+          p.write_text(s,encoding='utf-8')
           PY
           fi
 
