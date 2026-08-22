@@ -1,0 +1,163 @@
+name: Finalize HDPS self-contained language books
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/vendor-books.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  vendor:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout hd-18
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Vendor pinned book sources and apply final QA patches
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python - <<'PY'
+          import base64, json, os, re, urllib.request
+          from pathlib import Path
+
+          sources = {
+            'ko': {
+              'repo':'hd-08',
+              'index':'49a5dfef4b85937d350c56a87c77fb32a47544c6',
+              'style':'d52707b4d1f006a923dca25d84d7ac0b22de5bfb',
+              'script':'0e83c16a43a74f84a485aa88cacdc60c75ba0355',
+              'hero':'우리의 혁신(HDPS), HD건설기계 생산의 기준을 <span class="headline-mark">새로 정립하다</span>',
+              'back':'← 서재',
+              'edition':'ko'
+            },
+            'en': {
+              'repo':'hd-12',
+              'index':'b208d03f6d5862b587d40d982311769107323dcc',
+              'style':'46e284810ebcab528c166c3cc7ba84a6dee75a47',
+              'script':'6201d8c4863103021d1e6027f7bf0cd398113437',
+              'hero':'Our Production System, HDPS, <span class="headline-mark">Redefines</span> the Standard for Manufacturing',
+              'back':'← Library',
+              'edition':'en'
+            },
+            'pt-BR': {
+              'repo':'hd-13',
+              'index':'621b2b3efe6ad3c7e1a329a49d5ae805b1b46873',
+              'style':'c67394882efd3892e2e136854f1cf996139f76eb',
+              'script':'6201d8c4863103021d1e6027f7bf0cd398113437',
+              'hero':'Nosso Sistema de Produção, o HDPS, <span class="headline-mark">Redefine</span> o Padrão da Manufatura',
+              'back':'← Biblioteca',
+              'edition':'pt-BR'
+            },
+            'zh-CN': {
+              'repo':'hd-14',
+              'index':'5703c56e918126e0690e81a05c3fab0385c0de1b',
+              'style':'202125059b09ececca007a50496da2710aced289',
+              'script':'6201d8c4863103021d1e6027f7bf0cd398113437',
+              'hero':'我们的生产系统 HDPS，<span class="headline-mark">重新定义</span>制造标准',
+              'back':'← 书库',
+              'edition':'zh-CN'
+            }
+          }
+
+          def blob(repo, sha):
+            url=f'https://api.github.com/repos/hastom79-hue/{repo}/git/blobs/{sha}'
+            headers={'Accept':'application/vnd.github+json','User-Agent':'hd-18-finalizer'}
+            token=os.environ.get('GH_TOKEN','')
+            if token: headers['Authorization']=f'Bearer {token}'
+            req=urllib.request.Request(url,headers=headers)
+            with urllib.request.urlopen(req,timeout=30) as r:
+              data=json.load(r)
+            return base64.b64decode(data['content']).decode('utf-8')
+
+          final_css = r'''
+          /* =========================================================
+             HD-18 FINAL QA — self-contained book guardrails
+             ========================================================= */
+          html,body{width:100%;max-width:100%;overflow-x:hidden!important}
+          .topbar{justify-content:flex-end!important}
+          .topbar>.logo,.topbar>a:has(.logo),.topbar .brand-logo,.topbar .header-logo{display:none!important}
+          .headline-mark{display:inline-block!important;white-space:nowrap!important}
+          .hdps-library-return{position:fixed;z-index:999998;left:max(14px,env(safe-area-inset-left));bottom:max(14px,env(safe-area-inset-bottom));display:inline-flex;align-items:center;justify-content:center;min-height:38px;padding:9px 13px;border:1px solid rgba(255,255,255,.22);border-radius:999px;background:rgba(8,16,29,.94);color:#fff!important;text-decoration:none!important;font-size:11px;font-weight:900;line-height:1;box-shadow:0 8px 26px rgba(0,0,0,.28);backdrop-filter:blur(10px)}
+          .hdps-library-return:hover{transform:translateY(-2px)}
+          @media(max-width:760px){
+            .hero{height:auto!important;min-height:max(850px,100svh)!important;padding-bottom:120px!important}
+            .hero h1{word-break:normal!important;overflow-wrap:break-word!important}
+            .framework,.module-detail-section,.principles,.action,.target-impact{max-width:100%!important}
+            .hdps-library-return{font-size:10px;min-height:36px;padding:8px 11px}
+          }
+          '''
+
+          for lang,cfg in sources.items():
+            d=Path(lang); d.mkdir(parents=True,exist_ok=True)
+            html=blob(cfg['repo'],cfg['index'])
+            css=blob(cfg['repo'],cfg['style'])
+            js=blob(cfg['repo'],cfg['script'])
+
+            if not html.lstrip().lower().startswith('<!doctype'):
+              html='<!doctype html>\n'+html.lstrip()
+
+            # Remove the rectangular HD Hyundai logo at source level, before first paint.
+            html,n=re.subn(r'<a\b[^>]*>\s*<img\b[^>]*class=["\'][^"\']*\blogo\b[^"\']*["\'][^>]*?/?>\s*</a>', '', html, count=1, flags=re.I|re.S)
+            if n==0:
+              html=re.sub(r'<a\b[^>]*href=["\']#top["\'][^>]*>.*?class=["\']logo["\'].*?</a>', '', html, count=1, flags=re.I|re.S)
+
+            # Fix exact headline highlight scope for every language.
+            html=re.sub(r'<h1\s+class=["\']reveal d1["\']>.*?</h1>', f'<h1 class="reveal d1">{cfg["hero"]}</h1>', html, count=1, flags=re.S)
+
+            # Remove two source-only explanatory strings that were accidentally visible.
+            html=html.replace('Mantém o layout original do símbolo HDPS com seis princípios','')
+            html=html.replace('保留原有 HDPS 六大原则标识布局','')
+
+            inject=f'''\n<a class="hdps-library-return" href="../" aria-label="{cfg['back'].replace('← ','')}">{cfg['back']}</a>\n<script src="../dynamic-config.js"></script>\n<script src="../hdps-api.js"></script>\n<script>window.HDPS_API?.logAccess({{event:'book_view',edition:'{cfg['edition']}'}}).catch(()=>{{}});</script>\n<script src="../security.js"></script>\n'''
+            html=html.replace('</body>',inject+'</body>')
+
+            # Defensive logo purge in case future page scripts recreate it.
+            js += r'''\n\n/* HD-18 FINAL QA: keep removed header logo from reappearing */\n(()=>{const purge=()=>document.querySelectorAll('.topbar .logo,.topbar .brand-logo,.topbar .header-logo,.topbar img[alt*="HD Hyundai"],.topbar img[alt*="HD현대"]').forEach(el=>(el.closest('a')||el).remove());purge();new MutationObserver(purge).observe(document.documentElement,{subtree:true,childList:true});})();\n'''
+
+            (d/'index.html').write_text(html,encoding='utf-8')
+            (d/'style.css').write_text(css+'\n'+final_css,encoding='utf-8')
+            (d/'script.js').write_text(js,encoding='utf-8')
+
+          Path('VENDORED_SOURCES.md').write_text('''# HDPS language source snapshot\n\nThe four language books are stored directly in this repository for runtime independence.\n\n- Korean: hd-08 pinned blobs\n- English: hd-12 pinned blobs\n- Portuguese: hd-13 pinned blobs\n- Simplified Chinese: hd-14 pinned blobs\n\nFinal QA patches in hd-18 remove the header logo, normalize the library-return control, fix headline highlight scope, add access-event hooks, and apply mobile overflow safeguards.\n''',encoding='utf-8')
+          PY
+
+      - name: Validate final books
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          checks={
+            'ko':('<span class="headline-mark">새로 정립하다</span>','← 서재'),
+            'en':('<span class="headline-mark">Redefines</span> the Standard for Manufacturing','← Library'),
+            'pt-BR':('<span class="headline-mark">Redefine</span> o Padrão da Manufatura','← Biblioteca'),
+            'zh-CN':('<span class="headline-mark">重新定义</span>制造标准','← 书库')
+          }
+          for lang,(mark,back) in checks.items():
+            for name in ('index.html','style.css','script.js'):
+              p=Path(lang)/name
+              assert p.exists() and p.stat().st_size>500, f'{p} missing/too small'
+            h=(Path(lang)/'index.html').read_text(encoding='utf-8')
+            assert 'cdn.jsdelivr.net/gh/hastom79-hue/' not in h, f'{lang}: runtime CDN dependency remains'
+            assert mark in h, f'{lang}: headline mark incorrect'
+            assert back in h, f'{lang}: library return missing'
+            assert 'class="logo"' not in h, f'{lang}: rectangular header logo still in HTML'
+          print('FINAL_QA_OK')
+          PY
+
+      - name: Commit self-contained final books
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ko en pt-BR zh-CN VENDORED_SOURCES.md
+          if git diff --cached --quiet; then
+            echo "No vendoring changes"
+          else
+            git commit -m "Vendor final self-contained HDPS language books"
+            git push origin HEAD:main
+          fi
