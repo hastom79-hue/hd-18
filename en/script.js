@@ -212,8 +212,6 @@ if(fine&&!reduced){
   }else energize();
 })();
 
-
-
 /* Professional module SVG icons — visual only; labels/content unchanged */
 (()=>{
   const paths=['<circle cx="12" cy="7" r="3"/><path d="M5 20c.6-4 3-6 7-6s6.4 2 7 6"/><path d="M18 5l.7 1.5L20 7l-1.3 1 .4 1.7L18 8.8l-1.4.9.4-1.7-1.3-1 1.7-.5z"/>','<path d="M12 3l7 3v5c0 4.5-2.8 7.8-7 10-4.2-2.2-7-5.5-7-10V6z"/><path d="M9 14c3.5 0 5.5-2 6-5-3 .2-5.5 1.5-6 5z"/><path d="M9 14l4-3"/>','<circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="3"/><path d="M12 2v3M22 12h-3M12 22v-3M2 12h3"/><path d="M15 9l4-4"/>','<path d="M4 15V9l11-4v14L4 15z"/><path d="M15 9h3l2-2M18 7h2v2"/><path d="M6 15l1 5h3l-1-4"/>','<circle cx="7" cy="8" r="2.5"/><circle cx="17" cy="8" r="2.5"/><path d="M2.5 18c.5-3 2-5 4.5-5s4 2 4.5 5M12.5 18c.5-3 2-5 4.5-5s4 2 4.5 5"/><path d="M9 6h6M10 4L8 6l2 2M14 4l2 2-2 2"/>','<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V2h6v2M8 9h8M8 13h5M8 17h4"/><path d="M15 16l1.5 1.5L20 14"/>','<path d="M12 3l7 3v5c0 4.5-2.8 7.8-7 10-4.2-2.2-7-5.5-7-10V6z"/><path d="M8.5 12l2.2 2.2L16 9"/>','<rect x="4" y="4" width="12" height="16" rx="2"/><path d="M8 4V2h4v2M7 9h6M7 13h4"/><circle cx="17" cy="16" r="3"/><path d="M19.2 18.2L22 21"/>','<circle cx="12" cy="12" r="9"/><text x="12" y="15" text-anchor="middle" font-size="8" font-weight="800" fill="currentColor" stroke="none">5S</text>','<path d="M6 3h9l4 4v14H6z"/><path d="M15 3v5h5M9 12h6M9 16h6"/><path d="M8 8l1 1 2-2"/>','<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/><circle cx="12" cy="12" r="7"/>','<path d="M3 18h18M5 15l4-4 3 2 6-7"/><path d="M16 6h2v2"/>','<path d="M4 18V12h4v6M10 18V9h4v9M16 18V5h4v13"/><path d="M4 8l5-4 4 2 6-4"/><path d="M17 2h2v2"/>','<circle cx="10" cy="10" r="6"/><path d="M14.5 14.5L21 21M8 10h4M10 8v4"/>','<path d="M3 6h6l2 3h10M21 9l-2-2M21 9l-2 2"/><path d="M21 18h-6l-2-3H3M3 15l2-2M3 15l2 2"/>','<path d="M20 7a8 8 0 0 0-14-2L4 7"/><path d="M4 3v4h4M4 17a8 8 0 0 0 14 2l2-2"/><path d="M20 21v-4h-4"/>','<path d="M4 7l8-4 8 4-8 4z"/><path d="M4 7v10l8 4 8-4V7M12 11v10"/>','<path d="M12 3v18M6 6h12M8 6l-4 8h8zM16 6l-4 8h8zM8 21h8"/>','<path d="M5 7h14l-1 9H7zM8 20h.01M17 20h.01"/><path d="M12 2v8M9 7l3 3 3-3"/>'];
@@ -227,7 +225,6 @@ if(fine&&!reduced){
     el.prepend(icon);
   });
 })();
-
 
 /* RELEASE FINAL — size Daily Action by real layout width, never by transform */
 (()=>{
@@ -256,4 +253,3 @@ if(fine&&!reduced){
   addEventListener('resize',run,{passive:true});
   if(document.fonts?.ready) document.fonts.ready.then(run);
 })();
-\n\n/* HD-18 FINAL QA: keep removed header logo from reappearing */\n(()=>{const purge=()=>document.querySelectorAll('.topbar .logo,.topbar .brand-logo,.topbar .header-logo,.topbar img[alt*="HD Hyundai"],.topbar img[alt*="HD현대"]').forEach(el=>(el.closest('a')||el).remove());purge();new MutationObserver(purge).observe(document.documentElement,{subtree:true,childList:true});})();\n
