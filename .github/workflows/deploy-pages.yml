@@ -38,6 +38,7 @@ jobs:
           assert all(x in root for x in ('<span>발행일</span>','<span>발간자</span>','<span>에디션</span>'))
           assert all(x in root for x in ('대한민국 국기','인도 국기','브라질 국기','노르웨이 국기','중국 국기'))
           assert 'language-switch' in root and all(x in root for x in ('한국어','English','Português','简体中文'))
+          assert 'reader-count' in root and 'hdps_landing_reads' in root
           assert 'www.hd-hyundaice.com/upload/files/2025/05/1f2e5f03-d248-4e1c-9ae9-af0bea67bae4.jpg' in root
           assert 'eu.develon-ce.com/media/inline/25500' in root
           assert 'hdps-global-language-switch' in cfg
