@@ -37,7 +37,7 @@ const server=http.createServer(async(req,res)=>{
     if(req.method==='GET'&&u.pathname==='/api/health') return json(res,200,{ok:true,mode:'prototype'});
     if(req.method==='GET'&&u.pathname==='/api/me') return json(res,200,{authenticated:false,role:'anonymous'});
     if(req.method==='POST'&&u.pathname==='/api/access'){
-      const p=await body(req);const s=load();const now=new Date().toISOString();const userKey=String(p.userKey||req.socket.remoteAddress||crypto.randomUUID());s.access.push({at:now,userKey,event:p.event||'page_view',edition:p.edition||null,plant:p.plant||null,department:p.department||null});if(s.access.length>100000)s.access=s.access.slice(-100000);save(s);return json(res,201,{ok:true});
+      const p=await body(req);const s=load();const now=new Date().toISOString();const userKey=String(p.userKey||req.socket.remoteAddress||crypto.randomUUID());s.access.push({at:now,userKey,event:p.event||'page_view',edition:p.edition||null,plant:p.plant||null,department:p.department||null});if(s.access.length>100000)s.access=s.access.slice(-100000);save(s);return json(res,201,{ok:true,totalVisits:s.access.length,totalReaders:new Set(s.access.map(r=>r.userKey)).size});
     }
     if(req.method==='POST'&&u.pathname==='/api/master/login'){
       const p=await body(req);const c=credential();if(!c||!MASTER_NAME||!TOKEN_SECRET)return json(res,503,{ok:false,error:'MASTER backend is not configured'});const okName=String(p.name||'').trim().toLowerCase()===MASTER_NAME.toLowerCase();const okCode=timingEqual(hashCode(p.code||'',c.salt),c.hash);if(!okName||!okCode)return json(res,401,{ok:false,error:'Invalid credentials'});return json(res,200,{ok:true,token:sign({role:'master',name:MASTER_NAME})});
